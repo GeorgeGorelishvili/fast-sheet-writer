@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class TestFastWriter {
-	private static final String REPORT_PATH = "c:/tmp";
+	private static final String REPORT_PATH = System.getProperty("user.dir") + "/tmp";
 	private static final String FILE_NAME = "test";
 	private static final String XLSX = ".xlsx";
 
