@@ -10,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,35 +30,49 @@ public class SheetWriterImpl implements SheetWriter {
 	private XSSFWorkbook workbook;
 	private Writer writer;
 	private int rowIndex;
-	Map<String, XSSFCellStyle> styles = new HashMap<>();
+	Map<String, XSSFCellStyle> columnStyles = new HashMap<>();
 	private Set<String> mergeCells = new HashSet<>();
-
-	private static final String XLSX = ".xlsx";
-	private static final String REPORT_FILENAME = "report";
-	private static final String FILE_ENCODING = "UTF-8";
-	private static final String XML = ".xml";
 
 	private File template;
 	private File sheet;
 	private String referenceName;
 
+	private static boolean IS_WIN;
+
 	public SheetWriterImpl() {
 		workbook = new XSSFWorkbook();
+		IS_WIN = OSDetection.isWindows();
 	}
 
 	@Override
 	public void createSheet(String sheetName) throws IOException {
+		clearOldWorkFiles();
 		XSSFSheet worksheet = workbook.createSheet(sheetName);
 		referenceName = worksheet.getPackagePart().getPartName().getName().substring(1);
 
-		template = File.createTempFile(REPORT_FILENAME, XLSX);
+		template = File.createTempFile(Keys.PREFIX + Keys.REPORT_FILENAME, Keys.XLSX);
 		FileOutputStream fos = new FileOutputStream(template);
 		workbook.write(fos);
 		fos.close();
 
-		sheet = File.createTempFile(sheetName, XML);
-		writer = new OutputStreamWriter(new FileOutputStream(sheet), FILE_ENCODING);
+		sheet = File.createTempFile(Keys.PREFIX + sheetName, Keys.XML);
+		writer = new OutputStreamWriter(new FileOutputStream(sheet), Keys.FILE_ENCODING);
 		beginSheet();
+	}
+
+	private void clearOldWorkFiles() throws IOException {
+		File file = File.createTempFile(Keys.PREFIX, "");
+		File dir = file.getParentFile();
+		File[] tmpFiles = dir.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.startsWith(Keys.PREFIX);
+			}
+		});
+
+		for (File f : tmpFiles) {
+			f.delete();
+		}
 	}
 
 	@Override
@@ -113,7 +128,7 @@ public class SheetWriterImpl implements SheetWriter {
 
 	@Override
 	public void addStyle(String key, XSSFCellStyle style) {
-		styles.put(key, style);
+		columnStyles.put(key, style);
 	}
 
 	@Override
@@ -128,6 +143,9 @@ public class SheetWriterImpl implements SheetWriter {
 
 	private void addCell(int columnIndex, Object value, String styleKey, boolean formula) throws IOException {
 		String cellReference = new CellReference(this.rowIndex, columnIndex).formatAsString();
+		if (!IS_WIN) {
+			cellReference = cellReference.replace("$", "");
+		}
 		writer.write(new CellBuilder.Builder(cellReference)
 				.style(getStyle(styleKey))
 				.value(value)
@@ -151,18 +169,18 @@ public class SheetWriterImpl implements SheetWriter {
 
 	String normalizeFileName(String fileName) {
 		if (fileName == null) {
-			return REPORT_FILENAME + XLSX;
+			fileName = Keys.REPORT_FILENAME;
 		}
 		String result = fileName.trim();
-		if (!result.endsWith(XLSX)) {
-			result = fileName + XLSX;
+		if (!result.endsWith(Keys.XLSX)) {
+			result = fileName + Keys.XLSX;
 		}
 		return result;
 	}
 
-	String normalizeDirectory(String dir) {
+	private String normalizeDirectory(String dir) {
 		if (dir == null) {
-			return "c:/";
+			dir = System.getProperty("user.dir");
 		}
 		String result = dir.trim();
 		return result.endsWith("/") ? result.substring(0, result.length() - 1) : result;
@@ -245,6 +263,6 @@ public class SheetWriterImpl implements SheetWriter {
 	}
 
 	private XSSFCellStyle getStyle(String styleKey) {
-		return styleKey != null ? styles.get(styleKey) : null;
+		return styleKey != null ? columnStyles.get(styleKey) : null;
 	}
 }

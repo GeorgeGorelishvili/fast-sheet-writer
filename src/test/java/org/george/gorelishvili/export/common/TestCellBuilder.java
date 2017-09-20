@@ -43,7 +43,7 @@ public class TestCellBuilder {
 
 		SheetWriterImpl sw = new SheetWriterImpl();
 		sw.createDefaultStyles();
-		XSSFCellStyle style = sw.styles.get(Keys.DATETIME);
+		XSSFCellStyle style = sw.columnStyles.get(Keys.DATETIME);
 
 		df = new SimpleDateFormat(Format.DATETIME);
 		value = "10/11/2014 03:27";
@@ -83,7 +83,7 @@ public class TestCellBuilder {
 
 		SheetWriterImpl sw = new SheetWriterImpl();
 		sw.createDefaultStyles();
-		XSSFCellStyle style = sw.styles.get(Keys.ALLOW_WRAP);
+		XSSFCellStyle style = sw.columnStyles.get(Keys.ALLOW_WRAP);
 
 		result = new CellBuilder.Builder(cellReference)
 				.value(STRING_VALUE)
@@ -103,7 +103,7 @@ public class TestCellBuilder {
 
 		SheetWriterImpl sw = new SheetWriterImpl();
 		sw.createDefaultStyles();
-		XSSFCellStyle style = sw.styles.get(Keys.ALLOW_WRAP);
+		XSSFCellStyle style = sw.columnStyles.get(Keys.ALLOW_WRAP);
 
 		result = new CellBuilder.Builder(cellReference)
 				.value(STRING_VALUE)
@@ -122,7 +122,7 @@ public class TestCellBuilder {
 
 		SheetWriterImpl sw = new SheetWriterImpl();
 		sw.createDefaultStyles();
-		XSSFCellStyle style = sw.styles.get(Keys.AMOUNT);
+		XSSFCellStyle style = sw.columnStyles.get(Keys.AMOUNT);
 
 		result = new CellBuilder.Builder(cellReference)
 				.value(AMOUNT_VALUE)

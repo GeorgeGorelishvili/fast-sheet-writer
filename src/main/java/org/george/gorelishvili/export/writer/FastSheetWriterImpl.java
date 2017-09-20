@@ -1,5 +1,6 @@
 package org.george.gorelishvili.export.writer;
 
+import org.george.gorelishvili.export.common.Keys;
 import org.george.gorelishvili.export.common.SheetWriterImpl;
 import org.george.gorelishvili.export.common.ColumnHeader;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -10,7 +11,6 @@ import java.util.List;
 
 public class FastSheetWriterImpl implements FastSheetWriter {
 
-	private static final String SHEET_NAME = "sheet";
 	private SheetWriterImpl sw;
 
 	private int START_ROW_INDEX;
@@ -38,7 +38,7 @@ public class FastSheetWriterImpl implements FastSheetWriter {
 	@Override
 	public void createSheet(String name) throws IOException {
 		isSheetCreated = true;
-		sw.createSheet(name != null ? name : SHEET_NAME);
+		sw.createSheet(name != null ? name : Keys.SHEET_NAME);
 	}
 
 	@Override

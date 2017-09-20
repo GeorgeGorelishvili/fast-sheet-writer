@@ -1,5 +1,6 @@
 package org.george.gorelishvili.export.writer;
 
+import org.george.gorelishvili.export.common.Keys;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,8 +9,7 @@ import java.io.IOException;
 
 public class TestFastWriter {
 	private static final String REPORT_PATH = System.getProperty("user.dir") + "/tmp";
-	private static final String FILE_NAME = "test";
-	private static final String XLSX = ".xlsx";
+	private static final String FILE_NAME = "first";
 
 	@Test
 	public void createSheetTest() throws IOException {
@@ -79,10 +79,10 @@ public class TestFastWriter {
 
 	@Test
 	public void fileSaveTest() throws IOException {
-		FastSheetWriterImpl bean = new FastSheetWriterImpl();
-		bean.addCell("test cell");
-		bean.saveReport(REPORT_PATH, FILE_NAME);
-		String filePath = REPORT_PATH + "/" + FILE_NAME + XLSX;
+		FastSheetWriter fsw = FastSheetWriterImpl.getInstance();
+		fsw.addCell("first");
+		fsw.saveReport("/home/george/temp/"/*REPORT_PATH*/, FILE_NAME);
+		String filePath = "/home/george/temp/"/*REPORT_PATH*/ + "/" + FILE_NAME + Keys.XLSX;
 		Assert.assertTrue(new File(filePath).exists());
 	}
 }
