@@ -137,8 +137,18 @@ public class SheetWriterImpl implements SheetWriter {
 	}
 
 	@Override
-	public void mergeCellsHorizontal(int row, int firstColumn, int lastColumn) {
-		mergeCells.add(new CellRangeAddress(row, row, firstColumn, lastColumn).formatAsString());
+	public void mergeCellsHorizontal(int row, int firstColumnIndex, int lastColumnIndex) {
+		mergeCells(row, row, firstColumnIndex, lastColumnIndex);
+	}
+
+	@Override
+	public void mergeCellsVertical(int row1, int row2, int columnIndex) {
+		mergeCells(row1, row2, columnIndex, columnIndex);
+	}
+
+	@Override
+	public void mergeCells(int row1, int row2, int firstColumnIndex, int lastColumnIndex) {
+		mergeCells.add(new CellRangeAddress(row1, row2, firstColumnIndex, lastColumnIndex).formatAsString());
 	}
 
 	private void addCell(int columnIndex, Object value, String styleKey, boolean formula) throws IOException {

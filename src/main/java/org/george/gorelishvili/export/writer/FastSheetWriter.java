@@ -25,7 +25,11 @@ public interface FastSheetWriter {
 
 	void addFormulaCell(int columnIndex, String formula, String styleKey) throws IOException;
 
-	void mergeCellsHorizontal(int rowIndex, int firstColumn, int lastColumn) throws IOException;
+	void mergeCellsHorizontal(int rowIndex, int firstColumnIndex, int lastColumnIndex) throws IOException;
+
+	void mergeCellsVertical(int row1, int row2, int columnIndex) throws IOException;
+
+	void mergeCells(int row1, int row2, int firstColumnIndex, int lastColumnIndex) throws IOException;
 
 	int getCurrentRowIndex();
 

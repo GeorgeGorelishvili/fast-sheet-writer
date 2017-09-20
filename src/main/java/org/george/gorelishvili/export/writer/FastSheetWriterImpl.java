@@ -113,9 +113,22 @@ public class FastSheetWriterImpl implements FastSheetWriter {
 	}
 
 	@Override
-	public void mergeCellsHorizontal(int rowIndex, int firstColumn, int lastColumn) throws IOException {
+	public void mergeCellsHorizontal(int rowIndex, int firstColumnIndex, int lastColumnIndex) throws IOException {
 		addNewRowIfNeed();
-		sw.mergeCellsHorizontal(rowIndex, firstColumn, lastColumn);
+		sw.mergeCellsHorizontal(rowIndex, firstColumnIndex, lastColumnIndex);
+	}
+
+	@Override
+	public void mergeCellsVertical(int row1, int row2, int columnIndex) throws IOException {
+		addNewRowIfNeed();
+		sw.mergeCellsVertical(row1, row2, columnIndex);
+	}
+
+	@Override
+	public void mergeCells(int row1, int row2, int firstColumnIndex, int lastColumnIndex) throws IOException {
+		addNewRowIfNeed();
+		sw.mergeCells(row1, row2, firstColumnIndex, lastColumnIndex);
+
 	}
 
 	@Override

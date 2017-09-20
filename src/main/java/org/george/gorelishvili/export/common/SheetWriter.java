@@ -31,7 +31,11 @@ public interface SheetWriter {
 
 	void addStyle(String key, XSSFCellStyle style);
 
-	void mergeCellsHorizontal(int row, int firstColumn, int lastColumn);
+	void mergeCellsHorizontal(int row, int firstColumnIndex, int lastColumnIndex);
+
+	void mergeCellsVertical(int row1, int row2, int columnIndex);
+
+	void mergeCells(int row1, int row2, int firstColumnIndex, int lastColumnIndex);
 
 	void closeWriter() throws IOException;
 

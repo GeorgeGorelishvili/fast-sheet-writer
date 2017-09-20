@@ -12,6 +12,20 @@ public class TestFastWriter {
 	private static final String FILE_NAME = "first";
 
 	@Test
+	public void fileSaveTest() throws IOException {
+		FastSheetWriter fsw = FastSheetWriterImpl.getInstance();
+		fsw.mergeCellsHorizontal(1, 2);
+		fsw.addCell("first");
+		fsw.addCell("second");
+		fsw.addFirstCell("third");
+
+		fsw.mergeCells(2, 3, 3, 6);
+		fsw.saveReport("/home/george/temp/"/*REPORT_PATH*/, FILE_NAME);
+		String filePath = "/home/george/temp/"/*REPORT_PATH*/ + "/" + FILE_NAME + Keys.XLSX;
+		Assert.assertTrue(new File(filePath).exists());
+	}
+
+	@Test
 	public void createSheetTest() throws IOException {
 		FastSheetWriterImpl bean = new FastSheetWriterImpl();
 		Assert.assertNotNull(bean.getWorkbook());
@@ -75,14 +89,5 @@ public class TestFastWriter {
 		Assert.assertEquals(bean.getCurrentRowIndex(), 9);
 		Assert.assertEquals(bean.getCurrentColumnIndex(), 0);
 		Assert.assertEquals(bean.isRowOpened, false);
-	}
-
-	@Test
-	public void fileSaveTest() throws IOException {
-		FastSheetWriter fsw = FastSheetWriterImpl.getInstance();
-		fsw.addCell("first");
-		fsw.saveReport("/home/george/temp/"/*REPORT_PATH*/, FILE_NAME);
-		String filePath = "/home/george/temp/"/*REPORT_PATH*/ + "/" + FILE_NAME + Keys.XLSX;
-		Assert.assertTrue(new File(filePath).exists());
 	}
 }
